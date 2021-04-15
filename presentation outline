@@ -1,0 +1,41 @@
+Outline for presentation:
+
+- Introduction:
+  * What we'll cover
+- What is mobile interface design
+  * Designing apps and interfaces used in mobile devices
+  * Typically touch screen devices
+  * Definitely small screen size
+  * Often needs to be used in different environments
+  * Needs to fit many models
+- Why it's important
+  * By making good designs:
+    ~ Apps are more usable
+    ~ More users can achieve more using the apps
+    ~ Users more likely to continually use apps and recommend them to others
+- Challenges of mobile design
+  * Distracting environments
+  * Smaller screens
+  * Limited attention
+- Design principles
+  * Personalization
+  * Unique inputs
+  * Predictability
+  * Efficiency
+  * Feedback
+  * Aesthetic
+- Rules to follow
+  * Space between buttons and inputs
+  * Easy error fixing & undoing actions
+  * Large font and little text
+    ~ Use images, animations, and media
+  * All functionality should be easily and quickly accessible
+- Helpful tips
+  * Try to use your design as you make it
+  * Test out scenarios to see how difficult functions are
+  * Let other people try your design as you work on it
+- Summary
+  * 3 key rules to remember
+    ~ Screens are small - space out your buttons
+    ~ Phones are used in sunlight and bedside, make brightness workable
+    ~ People have a short attention span, make everything a click away
