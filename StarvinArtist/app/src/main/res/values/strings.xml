@@ -3,4 +3,9 @@
     <string name="art">Art</string>
     <string name="submit">Submit</string>
     <string name="search">Search...</string>
+    <string name="email">Email...</string>
+    <string name="password">Password...</string>
+    <string name="login">Login</string>
+    <string name="signup_instructions">Don&apos;t have an account? Sign up here</string>
+    <string name="signup">Sign up</string>
 </resources>
