@@ -6,6 +6,11 @@
     <string name="email">Email...</string>
     <string name="password">Password...</string>
     <string name="login">Login</string>
-    <string name="signup_instructions">Don&apos;t have an account? Sign up here</string>
+    <string name="signup_instructions">Don\'t have an account? Sign up here</string>
     <string name="signup">Sign up</string>
+    <string name="name">Name...</string>
+    <string name="buy">Buy</string>
+    <string name="artist">Artist: </string>
+    <string name="price">Price: </string>
+    <string name="contact">Contact at: </string>
 </resources>
