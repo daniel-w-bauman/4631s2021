@@ -13,4 +13,8 @@
     <string name="artist">Artist: </string>
     <string name="price">Price: </string>
     <string name="contact">Contact at: </string>
+    <string name="upload_instructions">Have art you want to upload?</string>
+    <string name="upload">upload</string>
+    <string name="price_hint">Price...</string>
+    <string name="contact_hint">Contact Info...</string>
 </resources>

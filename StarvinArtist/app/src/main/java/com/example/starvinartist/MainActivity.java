@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     ImageButton leftArrow;
     ImageButton rightArrow;
     Button buyButton;
+    Button uploadButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         leftArrow = (ImageButton) findViewById(R.id.left_arrow_button);
         rightArrow = (ImageButton) findViewById(R.id.right_arrow_button);
         buyButton = (Button) findViewById(R.id.buy_button);
+        uploadButton = (Button) findViewById(R.id.upload_button);
 
         leftArrow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,6 +61,14 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this, BuyActivity.class);
                 i.putExtra("id", artPhotos[imageCounter]);
+                startActivity(i);
+            }
+        });
+
+        uploadButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, UploadActivity.class);
                 startActivity(i);
             }
         });
