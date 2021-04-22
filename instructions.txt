@@ -1,0 +1,6 @@
+The main project is an android app that can be launched, built, and run
+using android studio.
+
+The project's directory needs to be opened using android studio, it is
+the StarvinArtist directory. Then, click the triangle button in android studio.
+
