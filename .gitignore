@@ -13,3 +13,5 @@
 .externalNativeBuild
 .cxx
 local.properties
+/StarvinArtistBackend/node_modules
+
