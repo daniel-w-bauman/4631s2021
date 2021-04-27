@@ -61,10 +61,50 @@ function createUser(name, email, password){
       vprint('Inserted '+res.insertedCount);
       resolve('User created.')
     }).catch(err => {
+      vprint(err)
       reject(err)
     })
   });
 }
 
+function login(email, password){
+  return new Promise(function(resolve, reject) {
+    vprint('Attempting to login: '+email)
+    var users = null
+    var user = null
+    connection.then(client => {
+      vprint('Connected to mongodb')
+      return client.db(dbname).collection('users')
+    }).then(res => {
+      users = res
+      return users.findOne({'email': email})
+    }).then(res => {
+      user = res
+      if(user != null){
+        let hashstr = email + password
+        return bcrypt.compare(hashstr,user.password)
+      } else {
+        vprint('User not found')
+        reject({'error': 'User not found.'})
+      }
+    }).then(res => {
+      if(res){
+        let token = uuidv4()
+        user.token = token
+        return users.findOneAndUpdate({'email': email}, {'$set': {'token': token}})
+      } else {
+        vprint('Incorrect email or password')
+        reject({'Error': 'Incorrect email or password'})
+      }
+    }).then(res => {
+      vprint('Successfully signed in')
+      resolve(user)
+    }).catch(err => {
+      vprint(err)
+      reject(err)
+    })
+  });
+}
 
 exports.createUser = createUser
+exports.login = login

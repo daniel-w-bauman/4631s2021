@@ -58,5 +58,27 @@ server.post('/createUser', (req, res) => {
   }
 })
 
+server.post('/login', (req, res) => {
+  let response = {}
+  response.status = '1'
+  if("email" in req.body && "password" in req.body){
+    users.login(req.body.email, req.body.password).then(res => {
+      response.status = '0'
+      response.user = res
+      vprint(res)
+      res.header("Content-Type",'application/json')
+      res.send(JSON.stringify(response, null, 4))
+    }).catch(err => {
+      response.error = err.error
+      res.header("Content-Type",'application/json')
+      res.send(JSON.stringify(response, null, 4))
+    })
+  } else {
+    response.error = 'Login must have email and password.'
+    res.header("Content-Type",'application/json')
+    res.send(JSON.stringify(response, null, 4))
+  }
+})
+
 vprint("Listening on http://localhost:3000")
 server.listen(3000)
