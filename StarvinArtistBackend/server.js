@@ -1,7 +1,10 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const users = require('./components/users')
+const multer  = require('multer')
 const server = express()
+const path = require('path')
+const multerConfig = require('./components/multerConfig')
 
 const verbose = true;
 function vprint(s){
@@ -40,9 +43,9 @@ server.post('/createUser', (req, res) => {
       res.header("Content-Type",'application/json')
       res.send(JSON.stringify(response, null, 4))
     } else {
-      users.createUser(req.body.name, req.body.email, req.body.password).then(res => {
+      users.createUser(req.body.name, req.body.email, req.body.password).then(result => {
         response.status = '0'
-        response.result = res
+        response.result = result
         res.header("Content-Type",'application/json')
         res.send(JSON.stringify(response, null, 4))
       }).catch(err => {
@@ -62,10 +65,10 @@ server.post('/login', (req, res) => {
   let response = {}
   response.status = '1'
   if("email" in req.body && "password" in req.body){
-    users.login(req.body.email, req.body.password).then(res => {
+    users.login(req.body.email, req.body.password).then(result => {
       response.status = '0'
-      response.user = res
-      vprint(res)
+      response.user = result
+      vprint(result)
       res.header("Content-Type",'application/json')
       res.send(JSON.stringify(response, null, 4))
     }).catch(err => {
@@ -79,6 +82,43 @@ server.post('/login', (req, res) => {
     res.send(JSON.stringify(response, null, 4))
   }
 })
+
+server.post('/logout', (req, res) => {
+  let response = {}
+  response.status = '1'
+  if('token' in req.body){
+    users.logout(req.body.token).then(result => {
+      response.status = '0'
+      response.result = result
+      res.header("Content-Type",'application/json')
+      res.send(JSON.stringify(response, null, 4))
+    }).catch(err => {
+      response.error = err.error
+      res.header("Content-Type",'application/json')
+      res.send(JSON.stringify(response, null, 4))
+    })
+  } else {
+    response.error = 'Token not supplied for logout'
+    res.header("Content-Type",'application/json')
+    res.send(JSON.stringify(response, null, 4))
+  }
+})
+
+server.post('/upload', (req, res) => {
+  multerConfig.upload(req, res, (err) => {
+    if(err){
+      vprint(err)
+      res.end('error: '+err.error);
+    } else {
+      if(req.file == undefined){
+        vprint(err)
+        res.end('error: '+err.error);
+      } else {
+        res.end('File uploaded: '+req.file.filename)
+      }
+    }
+  });
+});
 
 vprint("Listening on http://localhost:3000")
 server.listen(3000)

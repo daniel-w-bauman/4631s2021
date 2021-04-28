@@ -106,5 +106,36 @@ function login(email, password){
   });
 }
 
+function logout(token){
+  return new Promise(function(resolve, reject) {
+    var users = null
+    var user = null
+    vprint('Logging out '+token)
+    connection.then(client => {
+      vprint('Connected to mongodb')
+      return client.db(dbname).collection('users')
+    }).then(res => {
+      users = res
+      return users.findOne({'token': token})
+    }).then(res => {
+      user = res
+      if(user == null){
+        vprint('User was already logged out')
+        reject({'error': 'User was already logged out.'})
+        throw new Error('User was already logged out.');
+      } else {
+        return users.findOneAndUpdate({'email': user.email}, {'$set': {'token': ''}})
+      }
+    }).then(res => {
+      vprint('res: '+res)
+      resolve('User logged out successfully')
+    }).catch(err => {
+      vprint('err: '+err)
+      reject(err)
+    })
+  });
+}
+
 exports.createUser = createUser
 exports.login = login
+exports.logout = logout
