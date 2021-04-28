@@ -76,4 +76,54 @@ function addPhoto(filename, name, owner, tags) {
   });
 }
 
+function getTagPhoto(tag, index) {
+  return new Promise(function(resolve, reject) {
+    var client = null
+    var artid = null
+    connection.then(res => {
+      client = res
+      return client.db(dbname).collection('tags')
+    }).then(tags => {
+      return tags.findOne({'tag': tag})
+    }).then(tag => {
+      if(tag != null){
+        return tag.photos[index%(tag.photos.length)]
+      } else {
+        reject({'error': 'No tag found'})
+        return new Error('No tag found')
+      }
+    }).then(res => {
+      artid = res
+      return client.db(dbname).collection('photos')
+    }).then(photos => {
+      return photos.findOne({'artid': artid})
+    }).then(photo => {
+      vprint('found photo')
+      resolve(photo.filename)
+    }).catch(err => {
+      vprint(err)
+      reject(err)
+    })
+  });
+}
+
+function getPhoto(index){
+  return new Promise(function(resolve, reject) {
+    connection.then(client => {
+      return client.db(dbname).collection('photos')
+    }).then(photos => {
+      return photos.find().toArray()
+    }).then(photosArray => {
+      return photosArray[index%(photosArray.length)]
+    }).then(photo => {
+      resolve(photo.filename)
+    }).catch(err => {
+      vprint(err)
+      reject(err)
+    })
+  });
+}
+
 exports.addPhoto = addPhoto
+exports.getTagPhoto = getTagPhoto
+exports.getPhoto = getPhoto

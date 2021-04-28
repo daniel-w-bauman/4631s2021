@@ -163,65 +163,31 @@ server.post('/upload', (req, res) => {
   })
 })
 
-/*
-server.post('/upload', (req, res) => {
-  let response = {}
-  response.status = '1'
-  vprint('Got upload request')
-  if('token' in req.body && 'name' in req.body && 'tags' in req.body){
-    vprint('Attempting to create image '+req.body.name)
-    users.getUser.then(user => {
-      if(user != null){
-        vprint('Adding for user '+user.name)
-        multerConfig.upload(req, res, (err) => {
-          if(err){
-            vprint(err)
-            response.error = err.error
-            res.header("Content-Type",'application/json')
-            res.send(JSON.stringify(response, null, 4))
-          } else {
-            if(req.file == undefined){
-              vprint('Invalid file')
-              response.error = 'Invalid file'
-              res.header("Content-Type",'application/json')
-              res.send(JSON.stringify(response, null, 4))
-            } else {
-              vprint('Uploaded photo, adding to database')
-              art.addPhoto(req.file.filename, req.body.name, user.userid, req.body.tags.split(',')).then(result => {
-                vprint(result)
-                response.status = '0'
-                response.result = 'Uploaded picture'
-                res.header("Content-Type",'application/json')
-                res.send(JSON.stringify(response, null, 4))
-              }).catch(err => {
-                vprint(err)
-                response.error = err.error
-                res.header("Content-Type",'application/json')
-                res.send(JSON.stringify(response, null, 4))
-              })
-            }
-          }
-        });
-      } else {
-        vprint("Invalid login.")
-        response.error = "Invalid login."
-        res.header("Content-Type",'application/json')
-        res.send(JSON.stringify(response, null, 4))
-      }
+server.get('/tag/:tag/:index', (req, res) => {
+  if('tag' in req.params && 'index' in req.params){
+    art.getTagPhoto(req.params.tag, Math.floor(req.params.index)).then(filename => {
+      res.sendFile(__dirname+'/art/'+filename)
     }).catch(err => {
       vprint(err)
-      response.error = err.error
-      res.header("Content-Type",'application/json')
-      res.send(JSON.stringify(response, null, 4))
+      res.end(err.error)
     })
   } else {
-    vprint('Upload must contain photo, token, name, and tags.')
-    response.error = 'Upload must contain photo, token, name, and tags.'
-    res.header("Content-Type",'application/json')
-    res.send(JSON.stringify(response, null, 4))
+    res.end('No tag or index provided')
   }
-});
-*/
+})
+
+server.get('/photo/:index', (req, res) => {
+  if('index' in req.params){
+    art.getPhoto(Math.floor(req.params.index)).then(filename => {
+      res.sendFile(__dirname+'/art/'+filename)
+    }).catch(err => {
+      vprint(err)
+      res.end(err.error)
+    })
+  } else {
+    res.end('No index provided')
+  }
+})
 
 vprint("Listening on http://localhost:3000")
 server.listen(3000)

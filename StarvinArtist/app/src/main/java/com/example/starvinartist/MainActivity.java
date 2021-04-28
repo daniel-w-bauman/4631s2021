@@ -21,10 +21,14 @@ public class MainActivity extends AppCompatActivity {
     Button buyButton;
     Button uploadButton;
 
+    boolean signedIn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        signedIn = false;
 
         artView = (ImageView) findViewById(R.id.art_view);
         imageCounter = 0;
@@ -68,8 +72,13 @@ public class MainActivity extends AppCompatActivity {
         uploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, UploadActivity.class);
-                startActivity(i);
+                if(signedIn){
+                    Intent i = new Intent(MainActivity.this, UploadActivity.class);
+                    startActivity(i);
+                } else {
+                    Intent i = new Intent(MainActivity.this, LoginActivity.class);
+                    startActivity(i);
+                }
             }
         });
     }
