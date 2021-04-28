@@ -5,6 +5,7 @@ const multer  = require('multer')
 const server = express()
 const path = require('path')
 const multerConfig = require('./components/multerConfig')
+const art = require('./components/art')
 
 const verbose = true;
 function vprint(s){
@@ -105,20 +106,122 @@ server.post('/logout', (req, res) => {
 })
 
 server.post('/upload', (req, res) => {
+  let response = {}
+  response.status = '1'
+  vprint('Got upload request')
   multerConfig.upload(req, res, (err) => {
     if(err){
       vprint(err)
-      res.end('error: '+err.error);
+      response.error = err.error
+      res.header("Content-Type",'application/json')
+      res.send(JSON.stringify(response, null, 4))
     } else {
       if(req.file == undefined){
-        vprint(err)
-        res.end('error: '+err.error);
+        vprint('Error: undefined file')
+        response.error = 'Error: undefined file'
+        res.header("Content-Type",'application/json')
+        res.send(JSON.stringify(response, null, 4))
       } else {
-        res.end('File uploaded: '+req.file.filename)
+        vprint('uploaded')
+        if('token' in req.body && 'name' in req.body && 'tags' in req.body){
+          vprint('Adding photo')
+          users.getUser(req.body.token).then(user => {
+            if(user != null){
+              vprint('Adding for user '+user.name)
+              art.addPhoto(req.file.filename, req.body.name, user.userid, req.body.tags.split(',')).then(result => {
+                vprint(result)
+                response.status = '0'
+                response.result = 'Uploaded picture'
+                res.header("Content-Type",'application/json')
+                res.send(JSON.stringify(response, null, 4))
+              }).catch(err => {
+                vprint(err)
+                response.error = err.error
+                res.header("Content-Type",'application/json')
+                res.send(JSON.stringify(response, null, 4))
+              })
+            } else {
+              vprint("Invalid login.")
+              response.error = "Invalid login."
+              res.header("Content-Type",'application/json')
+              res.send(JSON.stringify(response, null, 4))
+            }
+          }).catch(err => {
+            vprint(err)
+            response.error = err.error
+            res.header("Content-Type",'application/json')
+            res.send(JSON.stringify(response, null, 4))
+          })
+        } else {
+          vprint('Token, name, or tags not in upload.')
+          response.error = 'Token, name, or tags not in upload.'
+          res.header("Content-Type",'application/json')
+          res.send(JSON.stringify(response, null, 4))
+        }
       }
     }
-  });
+  })
+})
+
+/*
+server.post('/upload', (req, res) => {
+  let response = {}
+  response.status = '1'
+  vprint('Got upload request')
+  if('token' in req.body && 'name' in req.body && 'tags' in req.body){
+    vprint('Attempting to create image '+req.body.name)
+    users.getUser.then(user => {
+      if(user != null){
+        vprint('Adding for user '+user.name)
+        multerConfig.upload(req, res, (err) => {
+          if(err){
+            vprint(err)
+            response.error = err.error
+            res.header("Content-Type",'application/json')
+            res.send(JSON.stringify(response, null, 4))
+          } else {
+            if(req.file == undefined){
+              vprint('Invalid file')
+              response.error = 'Invalid file'
+              res.header("Content-Type",'application/json')
+              res.send(JSON.stringify(response, null, 4))
+            } else {
+              vprint('Uploaded photo, adding to database')
+              art.addPhoto(req.file.filename, req.body.name, user.userid, req.body.tags.split(',')).then(result => {
+                vprint(result)
+                response.status = '0'
+                response.result = 'Uploaded picture'
+                res.header("Content-Type",'application/json')
+                res.send(JSON.stringify(response, null, 4))
+              }).catch(err => {
+                vprint(err)
+                response.error = err.error
+                res.header("Content-Type",'application/json')
+                res.send(JSON.stringify(response, null, 4))
+              })
+            }
+          }
+        });
+      } else {
+        vprint("Invalid login.")
+        response.error = "Invalid login."
+        res.header("Content-Type",'application/json')
+        res.send(JSON.stringify(response, null, 4))
+      }
+    }).catch(err => {
+      vprint(err)
+      response.error = err.error
+      res.header("Content-Type",'application/json')
+      res.send(JSON.stringify(response, null, 4))
+    })
+  } else {
+    vprint('Upload must contain photo, token, name, and tags.')
+    response.error = 'Upload must contain photo, token, name, and tags.'
+    res.header("Content-Type",'application/json')
+    res.send(JSON.stringify(response, null, 4))
+  }
 });
+*/
 
 vprint("Listening on http://localhost:3000")
 server.listen(3000)

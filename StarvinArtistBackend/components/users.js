@@ -136,6 +136,22 @@ function logout(token){
   });
 }
 
+function getUser(token){
+  return new Promise(function(resolve, reject) {
+    connection.then(client => {
+      return client.db(dbname).collection('users')
+    }).then(users => {
+      return users.findOne({'token': token})
+    }).then(res => {
+      vprint("Found user "+res)
+      resolve(res)
+    }).catch(err => {
+      reject(err)
+    })
+  });
+}
+
 exports.createUser = createUser
 exports.login = login
 exports.logout = logout
+exports.getUser = getUser
