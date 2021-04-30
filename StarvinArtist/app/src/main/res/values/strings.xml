@@ -17,4 +17,6 @@
     <string name="upload">upload</string>
     <string name="price_hint">Price...</string>
     <string name="contact_hint">Contact Info...</string>
+    <string name="profile">Profile</string>
+    <string name="logout">Logout</string>
 </resources>
