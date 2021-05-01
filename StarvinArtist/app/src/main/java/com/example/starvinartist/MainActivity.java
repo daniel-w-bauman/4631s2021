@@ -97,7 +97,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(MainActivity.this, BuyActivity.class);
-                i.putExtra("artid", 0);
+                i.putExtra("tag", tag);
+                i.putExtra("counter", imageCounter);
                 startActivity(i);
             }
         });
@@ -149,7 +150,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setTag(){
-        String url = "http://10.0.0.232:3000/tag/"+tag+"/"+imageCounter;
+        String url = "http://10.0.0.227:3000/tag/"+tag+"/"+imageCounter;
         ImageRequest request = new ImageRequest(url,
                 new Response.Listener<Bitmap>() {
                     @Override
@@ -168,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setImage(){
-        String url = "http://10.0.0.232:3000/photo/"+imageCounter;
+        String url = "http://10.0.0.227:3000/photo/"+imageCounter;
         ImageRequest request = new ImageRequest(url,
                 new Response.Listener<Bitmap>() {
                     @Override

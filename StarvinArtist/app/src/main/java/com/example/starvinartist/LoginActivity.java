@@ -74,7 +74,7 @@ public class LoginActivity extends AppCompatActivity {
         String email = emailInput.getText().toString();
         String password = passwordInput.getText().toString();
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "http://10.0.0.232:3000/login";
+        String url = "http://10.0.0.227:3000/login";
         Map<String, String> params = new HashMap<>();
         params.put("email", email);
         params.put("password", password);

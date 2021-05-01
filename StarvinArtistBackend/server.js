@@ -123,35 +123,42 @@ server.post('/upload', (req, res) => {
         res.send(JSON.stringify(response, null, 4))
       } else {
         vprint('uploaded')
-        if('token' in req.body && 'name' in req.body && 'tags' in req.body){
-          vprint('Adding photo')
-          users.getUser(req.body.token).then(user => {
-            if(user != null){
-              vprint('Adding for user '+user.name)
-              art.addPhoto(req.file.filename, req.body.name, user.userid, req.body.tags.split(',')).then(result => {
-                vprint(result)
-                response.status = '0'
-                response.result = 'Uploaded picture'
+        if('token' in req.body && 'name' in req.body && 'tags' in req.body && 'price' in req.body && 'contact' in req.body){
+          if(!isNaN(parseFloat(req.body.price))){
+            vprint('Adding photo')
+            users.getUser(req.body.token).then(user => {
+              if(user != null){
+                vprint('Adding for user '+user.name)
+                art.addPhoto(req.file.filename, req.body.name, user.userid, req.body.tags.split(','), parseFloat(parseFloat(req.body.price).toFixed(2)), req.body.contact).then(result => {
+                  vprint(result)
+                  response.status = '0'
+                  response.result = 'Uploaded picture'
+                  res.header("Content-Type",'application/json')
+                  res.send(JSON.stringify(response, null, 4))
+                }).catch(err => {
+                  vprint(err)
+                  response.error = err.error
+                  res.header("Content-Type",'application/json')
+                  res.send(JSON.stringify(response, null, 4))
+                })
+              } else {
+                vprint("Invalid login.")
+                response.error = "Invalid login."
                 res.header("Content-Type",'application/json')
                 res.send(JSON.stringify(response, null, 4))
-              }).catch(err => {
-                vprint(err)
-                response.error = err.error
-                res.header("Content-Type",'application/json')
-                res.send(JSON.stringify(response, null, 4))
-              })
-            } else {
-              vprint("Invalid login.")
-              response.error = "Invalid login."
+              }
+            }).catch(err => {
+              vprint(err)
+              response.error = err.error
               res.header("Content-Type",'application/json')
               res.send(JSON.stringify(response, null, 4))
-            }
-          }).catch(err => {
-            vprint(err)
-            response.error = err.error
+            })
+          } else {
+            vprint("Price not number")
+            response.error = "Price not number"
             res.header("Content-Type",'application/json')
             res.send(JSON.stringify(response, null, 4))
-          })
+          }
         } else {
           vprint('Token, name, or tags not in upload.')
           response.error = 'Token, name, or tags not in upload.'
@@ -188,6 +195,59 @@ server.get('/photo/:index', (req, res) => {
     })
   } else {
     res.end('No index provided')
+  }
+})
+
+server.get('/photo/info/:index', (req,res) => {
+  let response = {}
+  response.status = '1'
+  if('index' in req.params){
+    vprint("Requested photo #"+req.params.index);
+    art.getPhotoInfo(Math.floor(req.params.index)).then(photo => {
+      vprint("Sending photo")
+      response.status = '0'
+      response.name = photo.name
+      response.contact = photo.contact
+      response.tags = photo.tags
+      response.price = photo.price+""
+      res.header("Content-Type",'application/json')
+      res.send(JSON.stringify(response, null, 4))
+    }).catch(err => {
+      vprint(err)
+      response.error = err.error
+      res.header("Content-Type",'application/json')
+      res.send(JSON.stringify(response, null, 4))
+    })
+  } else {
+    vprint('No index provided')
+    response.error = 'No index provided'
+    res.header("Content-Type",'application/json')
+    res.send(JSON.stringify(response, null, 4))
+  }
+})
+
+server.get('/tag/info/:tag/:index', (req, res) => {
+  let response = {}
+  response.status = '1'
+  if('tag' in req.params && 'index' in req.params){
+    art.getTagPhotoInfo(req.params.tag, Math.floor(req.params.index)).then(photo => {
+      vprint("found photo")
+      response.status = '0'
+      response.contact = photo.contact
+      response.name = photo.name
+      response.tags = photo.tags
+      response.price = photo.price+""
+      res.header("Content-Type",'application/json')
+      res.send(JSON.stringify(response, null, 4))
+    }).catch(err => {
+      vprint(err)
+      res.end(err.error)
+    })
+  } else {
+    vprint('No tag or index provided')
+    response.error = 'No tag or index provided'
+    res.header("Content-Type",'application/json')
+    res.send(JSON.stringify(response, null, 4))
   }
 })
 

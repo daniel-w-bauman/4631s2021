@@ -17,7 +17,9 @@ Art object:
   "name": "<name>",
   "owner":  "<userid>",
   "tags": ["tag","tag","tag"],
-  "artid": "uniqid generated"
+  "artid": "uniqid generated",
+  "price" : float,
+  "contact": "<contact>"
 }
 */
 
@@ -29,7 +31,7 @@ Tag object:
 }
 */
 
-function addPhoto(filename, name, owner, tags) {
+function addPhoto(filename, name, owner, tags, price, contact) {
   return new Promise(function(resolve, reject) {
     vprint('adding photo: '+filename+' '+name+' '+owner+' '+tags)
     var photos = null
@@ -47,6 +49,8 @@ function addPhoto(filename, name, owner, tags) {
       artObj.owner = owner
       artObj.tags = tags
       artObj.artid = uuidv4()
+      artObj.price = price
+      artObj.contact = contact
       return photos.insertOne(artObj)
     }).then(res => {
       return client.db(dbname).collection('tags')
@@ -124,6 +128,54 @@ function getPhoto(index){
   });
 }
 
+function getPhotoInfo(index){
+  return new Promise(function(resolve, reject) {
+    connection.then(client => {
+      return client.db(dbname).collection('photos')
+    }).then(photos => {
+      return photos.find().toArray()
+    }).then(photosArray => {
+      resolve(photosArray[index%(photosArray.length)])
+    }).catch(err => {
+      vprint(err)
+      reject(err)
+    })
+  });
+}
+
+function getTagPhotoInfo(tag, index) {
+  return new Promise(function(resolve, reject) {
+    var client = null
+    var artid = null
+    connection.then(res => {
+      client = res
+      return client.db(dbname).collection('tags')
+    }).then(tags => {
+      return tags.findOne({'tag': tag})
+    }).then(tag => {
+      if(tag != null){
+        return tag.photos[index%(tag.photos.length)]
+      } else {
+        reject({'error': 'No tag found'})
+        return new Error('No tag found')
+      }
+    }).then(res => {
+      artid = res
+      return client.db(dbname).collection('photos')
+    }).then(photos => {
+      return photos.findOne({'artid': artid})
+    }).then(photo => {
+      vprint('found photo')
+      resolve(photo)
+    }).catch(err => {
+      vprint(err)
+      reject(err)
+    })
+  });
+}
+
 exports.addPhoto = addPhoto
 exports.getTagPhoto = getTagPhoto
 exports.getPhoto = getPhoto
+exports.getPhotoInfo = getPhotoInfo
+exports.getTagPhotoInfo = getTagPhotoInfo

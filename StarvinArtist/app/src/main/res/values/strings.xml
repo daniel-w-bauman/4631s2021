@@ -10,13 +10,14 @@
     <string name="signup">Sign up</string>
     <string name="name">Name...</string>
     <string name="buy">Buy</string>
-    <string name="artist">Artist: </string>
+    <string name="photo_name">Name</string>
     <string name="price">Price: </string>
-    <string name="contact">Contact at: </string>
+    <string name="contact">Contact: </string>
     <string name="upload_instructions">Have art you want to upload?</string>
     <string name="upload">upload</string>
     <string name="price_hint">Price...</string>
     <string name="contact_hint">Contact Info...</string>
+    <string name="tag_hint">Tags separate with \",\" i.e. tag1,tag2,tag3</string>
     <string name="profile">Profile</string>
     <string name="logout">Logout</string>
 </resources>
