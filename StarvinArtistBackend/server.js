@@ -178,7 +178,9 @@ server.get('/tag/:tag/:index', (req, res) => {
 
 server.get('/photo/:index', (req, res) => {
   if('index' in req.params){
+    vprint("Requested photo #"+req.params.index);
     art.getPhoto(Math.floor(req.params.index)).then(filename => {
+      vprint("Sending photo")
       res.sendFile(__dirname+'/art/'+filename)
     }).catch(err => {
       vprint(err)
