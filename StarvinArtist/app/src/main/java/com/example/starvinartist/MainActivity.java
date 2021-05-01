@@ -108,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(signedIn){
                     Intent i = new Intent(MainActivity.this, UploadActivity.class);
+                    i.putExtra("token", token);
                     startActivity(i);
                 } else {
                     Intent i = new Intent(MainActivity.this, LoginActivity.class);
