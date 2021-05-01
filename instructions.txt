@@ -4,3 +4,11 @@ using android studio.
 The project's directory needs to be opened using android studio, it is
 the StarvinArtist directory. Then, click the triangle button in android studio.
 
+The node server must be started first for full functionality, by running node server.js
+Also, a mongodb database must be run on the machine, and the local ip address
+needs to be stored in the file config.java under the ip variable.
+
+Functionality:
+Looping through photos, searching photos by tag, looking at photo's information
+(contact info, price, name). Uploading photos, but not through app, rather through
+HTTP POST client such as postman.
