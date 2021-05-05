@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setTag(){
-        String url = "http://10.0.0.227:3000/tag/"+tag+"/"+imageCounter;
+        String url = "https://starvinartist.herokuapp.com/tag/"+tag+"/"+imageCounter;
         ImageRequest request = new ImageRequest(url,
                 new Response.Listener<Bitmap>() {
                     @Override
@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void setImage(){
-        String url = "http://10.0.0.227:3000/photo/"+imageCounter;
+        String url = "https://starvinartist.herokuapp.com/photo/"+imageCounter;
         ImageRequest request = new ImageRequest(url,
                 new Response.Listener<Bitmap>() {
                     @Override

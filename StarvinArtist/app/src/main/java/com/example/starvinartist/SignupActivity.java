@@ -62,7 +62,7 @@ public class SignupActivity extends AppCompatActivity {
         String email = emailInput.getText().toString();
         String password = passwordInput.getText().toString();
         RequestQueue queue = Volley.newRequestQueue(this);
-        String url = "http://10.0.0.227:3000/createUser";
+        String url = "https://starvinartist.herokuapp.com/createUser";
         Map<String, String> params = new HashMap<>();
         params.put("name", name);
         params.put("email", email);

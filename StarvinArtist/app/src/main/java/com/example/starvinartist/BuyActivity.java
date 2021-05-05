@@ -60,7 +60,7 @@ public class BuyActivity extends AppCompatActivity {
     }
 
     public void setImage(int counter){
-        String url = "http://10.0.0.227:3000/photo/"+counter;
+        String url = "https://starvinartist.herokuapp.com/photo/"+counter;
         ImageRequest request = new ImageRequest(url,
                 new Response.Listener<Bitmap>() {
                     @Override
@@ -79,7 +79,7 @@ public class BuyActivity extends AppCompatActivity {
     }
 
     public void setTag(int counter, String tag){
-        String url = "http://10.0.0.227:3000/tag/"+tag+"/"+counter;
+        String url = "https://starvinartist.herokuapp.com/tag/"+tag+"/"+counter;
         ImageRequest request = new ImageRequest(url,
                 new Response.Listener<Bitmap>() {
                     @Override
@@ -98,7 +98,7 @@ public class BuyActivity extends AppCompatActivity {
     }
 
     public void getImageInfo(int counter){
-        String url = "http://10.0.0.227:3000/photo/info/"+counter;
+        String url = "https://starvinartist.herokuapp.com/photo/info/"+counter;
         Map<String, String> params = new HashMap<>();
         ServerRequest jsObjRequest = new ServerRequest(Request.Method.GET, url, params, new Response.Listener<JSONObject>(){
             @Override
@@ -125,7 +125,7 @@ public class BuyActivity extends AppCompatActivity {
     }
 
     public void getTagInfo(int counter, String tag){
-        String url = "http://10.0.0.227:3000/tag/info/"+tag+"/"+counter;
+        String url = "https://starvinartist.herokuapp.com/tag/info/"+tag+"/"+counter;
         Map<String, String> params = new HashMap<>();
         ServerRequest jsObjRequest = new ServerRequest(Request.Method.GET, url, params, new Response.Listener<JSONObject>(){
             @Override

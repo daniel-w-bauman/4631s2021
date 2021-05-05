@@ -50,7 +50,7 @@ public class UploadActivity extends AppCompatActivity {
     Button uploadButton;
     ImageView selectedImage;
 
-    static final String ROOT_URL = "http://10.0.0.227:3000/upload";
+    static final String ROOT_URL = "https://starvinartist.herokuapp.com/upload";
     static final int REQUEST_PERMISSIONS = 100;
     static final int PICK_IMAGE_REQUEST = 1;
     Bitmap bitmap;
