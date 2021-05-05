@@ -8,6 +8,10 @@
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
 .DS_Store
+/node_modules
+npm-debug.log
+.DS_Store
+/*.env
 /build
 /captures
 .externalNativeBuild
